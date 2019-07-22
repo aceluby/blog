@@ -32,6 +32,14 @@ module.exports = {
       label: "Tag - Misc",
       url: "/blog/tags/misc",
     },
+    {
+      label: "Tag - Gatsby",
+      url: "/blog/tags/gatsby",
+    },
+    {
+      label: "Tag - ReactJs",
+      url: "/blog/tags/reactjs",
+    },
   ],
   // Copyright string for the footer of the website and RSS feed.
   copyright: {
