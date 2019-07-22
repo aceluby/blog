@@ -1,68 +1,61 @@
 ---
 title: "Introduction"
-cover: "/images/hidden-beach-between-mountains-in-north-norway-picjumbo-com.jpg"
+cover: "/images/blog-cover.jpg"
 author: "jake"
 date: "2019-07-21"
 category: "tech"
 tags:
-    - reactjs
-    - java
-    - bash
+    - misc
 ---
-# Quanto et ius coniunctis urbes
+# Introduction
 
-## Sedisti civiliter
+## Who am I?
 
-Lorem **markdownum** Ixione palus **semper peritura barbaque** in aureus
-obliquum erigitur gemmae utque cur natus, aera supplice de nudae. Manus
-ambrosiam tendens, saecula tenet, conponere et ense et cucurri. Tantique
-animalia praeceps Meleagre greges venisse corpore et ignara, umquam ipse? Quam
-*Talibus ausis*.
+My name is Jake, and I've been in the software development space for 15 years.
+In that time I've developed Java Web Start apps, J2EE apps, desktop apps, 
+set up automated testing frameworks, architected and developed enterprise 
+applications in Java Spring, built AngularJs front-ends, constructed 
+CI/CD pipelines, scripted my way out of every DevOps job I've had, 
+and most recently have been developing ReactJs front-ends.  I'm sure there's
+a lot more, but those are the big buckets.  In that time I've learned _a lot_ 
+about the SLDC - so much so that I feel like I've forgotten some great ideas
+and implementations over the years, which is where this blog fits in.
 
-## Vultusque subsequitur Pallas regis datis inde animaque
+## What I Learned Today Blog
 
-At securim cautum capitis, creatos sanguinis turbant iam concita videor, edere.
-Alis genas rudis felix quas **longum** suorum manu ante prima **usque**. Nec pro
-mea pariter, ictus iam consequitur capillos elegit ego; quoniam **fuit**. Aether
-Peleus Aeneadae audacia cruentatis turbae Procrin dirum bacae, accede.
+I've found through my experience that I'm constantly learning new tools,
+new technologies, and new ways to think about a problem.  I've also found
+that if that problem comes up again, unless I did some amazing documentation,
+I usually have to go back to the same sources to do it again.
 
-```php
-    urlLinkedin.midi_manet -= namespace(backsideKilobitBezel);
-    var ddr = storage_wordart_sdram;
-    python.raw_backlink = rfid_load - 4;
-    kibibyte *= cdnThumbnailUri;
+That's where this blog comes in.
+
+I want a spot where I can log these step-by-step, so that in the future I 
+can peruse them, write about new solutions I've found since writing the 
+article, and hopefully be another spot some simple examples and answers
+can be found around the community.
+
+## Let's Get Started....
+
+Most of this walkthrough can be found via 
+[this gatsby starter project](https://www.gatsbyjs.org/starters/GatsbyCentral/gatsby-v2-starter-casper/)
+
+### How Was This Blog Built
+
+
+This blog was created using a framework called [Gatsby](https://www.gatsbyjs.org/).
+To install Gatsby, first install npm then run
+```bash
+npm install -g gatsby-cli
+```
+```
+mkdir blog
+gatsby new blog https://github.com/haysclark/gatsby-starter-casper
 ```
 
-## Fortis dextrae humo limina Tempus singultibus illa
-
-Nate muros orbe [patris](http://debebuntilla.org/res-ego) rigent, nec tumida,
-pigra iuste At spretarumque latus et nostrum. Passa videtur: inde aut de
-sociorum: pars est, qualesque spes factum terris. Custodia sum animumque; iubet
-in pulvere carus, relinquunt incitat. Aliis quo tribus, vertice cesserunt
-vulneribus nostrae mollire erant ferrum habet loquiturque precibus expersque
-quam etiamnunc. Puraque [repetitque](http://mihi-aiax.io/suaferunt.aspx),
-funestaque crebros mihi conubia matres insopitumque residunt rogat ponto canos
-ergo firmat albentia verba casuque.
-
-```perl
-    if (lion_vdu + vrml_upnp - redundancyAccessPharming) {
-        driveProcessor = floatingWord(commerceDockRestore(database));
-    } else {
-        partition_source_thunderbolt = -2 + tokenStateArchive /
-                teraflops_gigahertz;
-    }
-    exabytePhpMacintosh -= graphic_cycle(expression, memory(ideFatMatrix,
-            controlInboxMode), 50) + -3;
-    buffer_apple_hdmi += viralSync + internetDigital / tweak_perl_expansion(
-            masterNullFloating + vdu, software_play);
+components/GetNavList
+```
+-    to: "/about/"
++    to: "/author/jake"
 ```
 
-## Nati expugnacior nympha milia nascuntur amico
-
-Multis timidus hic si auctor hausit. Suos taedasque, malis est nitente sceleri
-sunt florem.
-
-Sub quid deprenderat mores postquam tectoque maiestatemque debebat quibus;
-subitam amittere illius esse dona. Quamvis patris virtutem, partem una per
-iuvenaliter, stupet, sed nullae sepulto moderato? Nec phaedimus aequoris dixit.
-Hic bis parenti: e petunt satis.

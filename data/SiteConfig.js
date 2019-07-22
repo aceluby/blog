@@ -18,7 +18,7 @@ module.exports = {
   // siteFBAppID: "1825356251115265", // optional, sets the FB Application ID for using app insights
   sitePaginationLimit: 10, // The max number of posts per page.
   googleAnalyticsID: "UA-111982167-1", // GA tracking ID.
-  disqusShortname: "https-vagr9k-github-io-gatsby-advanced-starter", // enables Disqus comments, visually deviates from original Casper theme.
+  // disqusShortname: "https-vagr9k-github-io-gatsby-advanced-starter", // enables Disqus comments, visually deviates from original Casper theme.
   siteSocialUrls: [
     "https://aceluby.github.io/resume/",
     "https://stackoverflow.com/users/11500664/jake-luby",
@@ -29,25 +29,9 @@ module.exports = {
   // Links to social profiles/projects you want to display in the navigation bar.
   userLinks: [
     {
-      label: "GitHub",
-      url: "https://github.com/aceluby/",
-      iconClassName: "fa fa-github" // Disabled, see Navigation.jsx
+      label: "Tag - Misc",
+      url: "/blog/tags/misc",
     },
-    {
-      label: "Stack Overflow",
-      url: "https://stackoverflow.com/users/11500664/jake-luby",
-      iconClassName: "fa fa-stackoverflow" // Disabled, see Navigation.jsx
-    },
-    {
-      label: "Twitter",
-      url: "https://twitter.com/aceluby\"",
-      iconClassName: "fa fa-twitter" // Disabled, see Navigation.jsx
-    },
-    {
-      label: "Email",
-      url: "mailto:jake.luby@gmail.com",
-      iconClassName: "fa fa-envelope" // Disabled, see Navigation.jsx
-    }
   ],
   // Copyright string for the footer of the website and RSS feed.
   copyright: {

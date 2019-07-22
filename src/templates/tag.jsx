@@ -48,7 +48,7 @@ class TagTemplate extends React.Component {
     const {
       location,
       data: { authors },
-      pageContext: { tag, page, pages, total, limit, prev, next }
+      pageContext: { tag, page, pages, total, limit, prev, next, nodes }
     } = this.props;
     const { menuOpen } = this.state;
 
