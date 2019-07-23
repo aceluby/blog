@@ -59,9 +59,10 @@ to create the code scaffolding.
 mkdir blog
 gatsby new blog https://github.com/haysclark/gatsby-starter-casper
 ```
-I had to manually run an npm install after this
+Delete the `package-lock.json` file and run `npm install`
 ```bash
 cd blog
+rm package-lock.json
 npm install
 ```
 You can see it run locally by:
@@ -162,4 +163,8 @@ once it's ready.
 #### Enjoy Your Blog!
 
 You now have a fully functional, personalized blog for free!  My code can be found here: https://github.com/aceluby/blog
-for reference.
+for reference.  
+
+_Authors Note_
+Since writing this I've found a few bugs here and there in displaying of things like backgrounds.  Details around
+those changes have not been captured above, but is in the code.
