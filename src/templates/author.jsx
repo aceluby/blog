@@ -75,7 +75,7 @@ class AuthorTemplate extends React.Component {
           <Navigation config={config} onClose={this.handleOnClose} />
 
           <SiteWrapper>
-            <MainHeader className="author-head" cover={cover}>
+            <MainHeader className="author-head" cover={config.siteCover}>
               <MainNav>
                 <BlogLogo logo={config.siteLogo} title={config.siteTitle} />
                 <MenuButton

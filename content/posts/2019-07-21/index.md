@@ -1,6 +1,7 @@
 ---
 title: "Introduction"
-cover: "/images/blog-cover.jpg"
+subtitle: "How to Create a GitHub Pages Blog"
+cover: "/blog/images/hidden-beach-between-mountains-in-north-norway-picjumbo-com.jpg"
 author: "jake"
 date: "2019-07-21"
 category: "tech"
@@ -9,7 +10,7 @@ tags:
     - gatsby
     - reactjs
 ---
-# Introduction
+# How to Create a GitHub Pages Blog
 
 ## Who am I?
 
@@ -71,7 +72,7 @@ gatsby develop
 #### Github
 First, initialize your local git repo with `git init`.  Then create a new repo under your github account.  Once
 created you can link your local repo to your git repo with `git remote add origin https://github.com/user/repo.git`, 
-mine was `git remote add origin ≈`
+mine was `git remote add origin https://github.com/aceluby/blog.git`
 
 #### Customization
 ##### SiteConfig.js

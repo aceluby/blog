@@ -4,5 +4,11 @@
   "image": "https://media.licdn.com/dms/image/C4E03AQEEKBDkpdoKwA/profile-displayphoto-shrink_200_200/0?e=1565222400&v=beta&t=K1hj-UcXtyYRN6ahApVNZwHqT_MD19micnakHM55aLc",
   "url": "https://aceluby.github.io/resume/",
   "location": "Minneapolis, MN",
-  "bio": "Technology leader with 15 years of SLDC experience."
+  "bio": "Technology leader with 15 years of SLDC experience.",
+  "socialUrls": [
+    "https://aceluby.github.io/resume/",
+    "https://stackoverflow.com/users/11500664/jake-luby",
+    "https://twitter.com/aceluby",
+    "mailto:jake.luby@gmail.com"
+  ]
 }

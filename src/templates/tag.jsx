@@ -63,7 +63,7 @@ class TagTemplate extends React.Component {
             {/* All the main content gets inserted here */}
             <div className="tag-template">
               {/* The big featured header */}
-              <MainHeader className="tag-head" cover={tag.featureImage}>
+              <MainHeader className="tag-head" cover={config.siteCover}>
                 <MainNav>
                   <BlogLogo logo={config.siteLogo} title={config.siteTitle} />
                   <MenuButton
