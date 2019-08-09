@@ -1,25 +1,25 @@
 ---
-title: "Cancel In-Flight Axios Calls"
-cover: "/blog/images/hidden-beach-between-mountains-in-north-norway-picjumbo-com.jpg"
+title: "Cancel In-Flight Axios Calls in Hooks"
+cover: "/blog/images/blog-cover.jpg"
 author: "jake"
-date: "2019-07-29"
+date: "2019-08-09"
 category: "tech"
 tags:
-    - reactjs
-    - javascript
+  - reactjs
+  - javascript
 ---
 
 ## The Problem
 
 Today I ran into an issue where I had a couple of buttons on screen to move the date
-up or down a day, which would refresh the screen with all the data for that day.  The
+up or down a day, which would refresh the screen with all the data for that day. The
 functionality worked great, but at some point the page was making upwards of 10 REST
-calls on each refresh.  This wouldn't have been an issue if they were truly being done
-asynchronously, the renders would just ignore those returns, but the browser was taking 
-these calls and adding them to a queue.  Again, this wouldn't have been an issue, except 
+calls on each refresh. This wouldn't have been an issue if they were truly being done
+asynchronously, the renders would just ignore those returns, but the browser was taking
+these calls and adding them to a queue. Again, this wouldn't have been an issue, except
 that one could hit the previous day button 5, 10, or 100 times - queue up hundreds or even
 thousands of outbound calls, and then the UI would just patiently wait as the data stream
-from the calls came in.  
+from the calls came in.
 
 This was unacceptable for my UI responsiveness, so I looked into how to cancel in-flight calls.
 
@@ -27,133 +27,152 @@ This was unacceptable for my UI responsiveness, so I looked into how to cancel i
 
 In my current project, all of my Rest calls go through a single hook called `useRest`
 
-## Let's Get Started....
+```javascript
+export const useHygieiaRest = (path) => {
+  const mounted = useIsMounted()
+  const [response, setResponse] = useState(null)
 
-Most of this walkthrough can be found via 
-[this gatsby starter project](https://www.gatsbyjs.org/starters/GatsbyCentral/gatsby-v2-starter-casper/).
+  useEffect(() => {
 
-### How Was This Blog Built
+    const isValidResponse = response => {
+      return (mounted && response && response.data)
+    }
 
-For this post we'll take a deep dive into how to build this and deploy it to GitHub pages for free.
+    const getMetricData = async () => {
+      const host = await config.getHost()
+      const url = `${host}${path}`
+      const response = await axios.get(url)
+      if (isValidResponse(response)) {
+        setResponse(resopnse.data)
+      }
+    }
 
-#### Pre-Reqs
-This blog was created using a framework called [Gatsby](https://www.gatsbyjs.org/).
-To install Gatsby, first install npm then run
-```bash
-npm install -g gatsby-cli
-```
-After Gatsby is installed, create a new directory and run the Gatsby `new` command
-to create the code scaffolding.
-```bash
-mkdir blog
-gatsby new blog https://github.com/haysclark/gatsby-starter-casper
-```
-Delete the `package-lock.json` file and run `npm install`
-```bash
-cd blog
-rm package-lock.json
-npm install
-```
-You can see it run locally by:
-```bash
-gatsby develop
+    if (mounted) {
+      getMetricData()
+    }
+  }, [path, mounted])
+
+  return response
+}
 ```
 
-#### Github
-First, initialize your local git repo with `git init`.  Then create a new repo under your github account.  Once
-created you can link your local repo to your git repo with `git remote add origin https://github.com/user/repo.git`, 
-mine was `git remote add origin https://github.com/aceluby/blog.git`
+This very simple hook allows me to reduce the majority of the rest calls I 
+need to make into a single line of code in the components that need the data.
+The problem really comes into play when a single page is making calls to a 
+slow API.  In my case, the searching I was doing was taking 2-8 seconds per call
+(which I won't get into why, but I at first had to just deal with it).
 
-#### Customization
-##### SiteConfig.js
+## Multiple Renders in Succession
 
-The first file we're going to update is the `data/SiteConfig.js` file.  This file
-drives a lot of the static content of our site.
+The big problem happened when a user clicked the previous or next day multiple times
+in a row.  Every render would make a slow API call that would get queued up taking
+anywhere from 30 seconds to 2 minutes to load data.  Nobody wants to wait around
+for 2 minutes to see a dashboard.  It's not 1996.
 
-I changed the following:
-```yml
-  blogPostDir: "posts", // The name of directory that contains your posts.
-  blogAuthorDir: "authors", // The name of directory that contains your 'authors' folder.
-  blogAuthorId: "jake", // The default and fallback author ID used for blog posts without a defined author.
-  siteTitle: "What I Learned Today", // Site title.
-  siteTitleAlt: "A Daily Engineering Blog", // Alternative site title for SEO.
-  siteUrl: "https://aceluby.github.io/", // Domain of your website without pathPrefix.
-  pathPrefix: "/blog", // Prefixes all links. For cases when deployed to example.github.io/gatsby-starter-casper/.
-  siteDescription: "A technology blog for software engineers", // Website description used for RSS feeds/meta description tag.
-  siteRssAuthor: "What I Learned Today", // The author name used in the RSS file
-  sitePaginationLimit: 10, // The max number of posts per page.
-  googleAnalyticsID: "UA-111982167-1", // GA tracking ID.
-  siteSocialUrls: [
-    "https://aceluby.github.io/resume/",
-    "https://stackoverflow.com/users/11500664/jake-luby",
-    "https://twitter.com/aceluby",
-    "mailto:jake.luby@gmail.com"
-  ],
-  postDefaultCategoryID: "Tech", // Default category for posts.
-  // Below is what
-  userLinks: [
-    {
-      label: "Tag - Misc",
-      url: "/blog/tags/misc",
-    },
-  ],
-  copyright: {
-    label: "What I Learned Today" // Label used before the year
-  },
-};
+## How to Cancel Previous Render's Axios Calls
+
+The solution I came up with was to cancel the previous call when a new path
+is given.  Axios has a way to do that with cancel tokens.  Below is the code
+that handle cancelling.  I'll explain the sections after.
+
+```javascript
+export const useHygieiaRest = (path) => {
+  const mounted = useIsMounted()
+  const [response, setResponse] = useState(null)
+  const CancelToken = axios.CancelToken
+  const cancelRef = useRef(null)
+
+  useEffect(() => {
+
+    const isValidResponse = response => {
+      return (mounted && response && response.data)
+    }
+
+    const getMetricData = async () => {
+      const cancel = cancelRef.current
+      if (cancel) {
+        cancel()
+      }
+        
+      const host = await config.getHost()
+      const url = `${host}${path}`
+      const response = await axios
+        .get(url, {
+          cancelToken: new CancelToken(function executor(c) {
+            cancelRef.current = c
+          }),
+        })
+        .catch(error => {
+          if (axios.isCancel(error)) {
+            //this is now expected
+          }
+        })
+      if (isValidResponse(response)) {
+        setResponse(resopnse.data)
+      }
+    }
+
+    if (mounted) {
+      getMetricData()
+    }
+  }, [path, mounted, CancelToken])
+
+  return response
+}
 ```
 
-Note that in the `userLinks` section I decided to build a list of the tags that I'm using.  I didn't have a 
-great way to go about this and there's no built in way to see all the tags - so it's manual for now.  That might
-be something that I look to update in the future (and hopefully a future blog post!).
+### Store the CancelToken between Renders
 
-##### Authors
-
-In `content/authos/authors` I copy/pasted `casper.json` to a new file `jake.json`.  That new file looks like:
-
-```json
-{
-   "uid": "jake",
-   "name": "Jake Luby",
-   "image": "https://media.licdn.com/dms/image/C4E03AQEEKBDkpdoKwA/profile-displayphoto-shrink_200_200/0?e=1565222400&v=beta&t=K1hj-UcXtyYRN6ahApVNZwHqT_MD19micnakHM55aLc",
-   "url": "https://aceluby.github.io/resume/",
-   "location": "Minneapolis, MN",
-   "bio": "Technology leader with 15 years of SLDC experience."
- }
+```javascript
+const CancelToken = axios.CancelToken
+const cancelRef = useRef(null)
 ```
 
-##### Posts
+In order to have access to the cancel token between renders we need to store it
+in a ref.  The above code sets up the ref so the hook can access values set
+during a previous render.
 
-Based on my site config file, posts should be found in `content/posts` organized by date folders.  Create a new
-folder with today's date and add an `index.md` file.  You can copy/paste one from the examples given
-in the starter for now.
 
-##### About
 
-One of the things I didn't like is the `About` link in the menu.  It's geared more for a blog with multiple authors, 
-and I don't really need it, or want to create a new ReactJs component from scratch.  So, instead I'm going to link the
-generated profile page.  To do that go to `components/Navigation/GetNavList` and update `to: "/about/"` to 
-`to: "/author/<yourAuthorNameHere>"`.  Now your main page will link to your bio when clicked.
+### Set the CancelToken of the Current API Call
 
-##### robots.txt
+```javascript
+const response = await axios
+  .get(url, {
+    cancelToken: new CancelToken(function executor(c) {
+      cancelRef.current = c
+    }),
+  })
+```
 
-In order for the site to work on github, `static/robots.txt` needs to be updated with the correct sitemap.  I
-updated mine to include `sitemap: https://aceluby.github.io/blog/sitemap.xml`
+In the above, axios takes in an options object with the cancelToken.  The
+CancelToken object can take an executor function as a parameter that has 
+access to the token `c`.  We take that and set it as the current token.
 
-#### Running on GitHub Pages
+### Cancel the Previous Call
+```javascript
+const cancel = cancelRef.current
+if (cancel) {
+  cancel()
+}
+```
 
-Once you have updated the configuration and everything looks good locally, you can publish the changes to github.
-You can do this locally by running `npm run build:gh`.  This will build the gatsby site for you and publish it
-to your github pages.  To view go to https://_user_.github.io/_repo_/, mine is found at https://aceluby.github.io/blog/.
+If there was a previous API call made the cancelRef.current will have a value,
+so we grab it and it exists, run it as a function.  This function will
+cancel the call tied to that CancelToken.
 
-To save the blog post, but not publish it, just check the `index.md` file into your git repo and run the build script 
-once it's ready.
+### Accept Cancellations
+```javascript
+.catch(error => {
+  if (axios.isCancel(error)) {
+    //this is now expected
+  }
+})
+```
 
-#### Enjoy Your Blog!
+Now if axios receives a cancellation call, it will swallow it and not log it 
+as a network error.
 
-You now have a fully functional, personalized blog for free!  My code can be found here: https://github.com/aceluby/blog
-for reference.  
+## Done!
 
-_Authors Note_
-Since writing this I've found a few bugs here and there in displaying of things like backgrounds.  Details around
-those changes have not been captured above, but is in the code.
+That's it!  Have a better solution or have feedback?  Leave a comment below!
