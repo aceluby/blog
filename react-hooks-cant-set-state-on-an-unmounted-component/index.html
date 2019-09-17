@@ -79,7 +79,7 @@ hooks, however we have some options.</p>
 <p>With functional components you need to think about things a bit differently.  Functional
 components only care about <em>this</em> render, so if there are multiple renders we need to
 block we need to have something that can go across renders.  Obviously we don't want
-to use <code class="language-text">etState</code> since that is what we're trying to avoid, so we pull out the <code class="language-text">useRef</code>
+to use <code class="language-text">setState</code> since that is what we're trying to avoid, so we pull out the <code class="language-text">useRef</code>
 which can hold values across renders, but doesn't force a rerender like <code class="language-text">setState</code>.
 Sounds perfect.  This is what that looks like</p>
 <div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token function-variable function">Example</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
@@ -132,7 +132,7 @@ project.</p>
 wrap almost every <code class="language-text">setState</code> in an if statement if we want to really protect
 ourselves going forward, littering our otherwise clean code.
 What if we could reduce this to a single function call that checks whether the
-component is mounted before calling 'setState'</p>
+component is mounted before calling <code class="language-text">setState</code></p>
 <div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token function-variable function">useIfMounted</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
     <span class="token keyword">const</span> isMounted <span class="token operator">=</span> <span class="token function">useRef</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
     <span class="token function">useEffect</span><span class="token punctuation">(</span>
